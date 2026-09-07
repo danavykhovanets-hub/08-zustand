@@ -27,13 +27,20 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default function RootLayout({
+  children,
+  modal,          
+}: {
+  children: ReactNode;
+  modal: ReactNode;   
+}) {
   return (
     <html lang="en" className={roboto.variable}>
       <body>
         <TanStackProvider>
           <Header />
           <main>{children}</main>
+          {modal}
           <footer>
             <p>
               Created <time dateTime="2025">2025</time>

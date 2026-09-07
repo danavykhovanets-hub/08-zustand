@@ -8,12 +8,12 @@ import NotesClient from "../../Notes.client";
 import type { Metadata } from "next";
 
 interface FilterPageProps {
-  params: Promise<{ filter: string[] }>;
+  params: Promise<{ slug: string[] }>;
 }
 
 export default async function FilterPage({ params }: FilterPageProps) {
-  const { filter } = await params;
-  const tag = filter[0] === "all" ? undefined : filter[0];
+  const { slug } = await params;
+  const tag = slug[0] === "all" ? undefined : slug[0];
 
   const queryClient = new QueryClient();
 
@@ -32,10 +32,10 @@ export default async function FilterPage({ params }: FilterPageProps) {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ filter: string[] }>;
+  params: Promise<{ slug: string[] }>;
 }): Promise<Metadata> {
-  const { filter } = await params;
-  const tag = filter[0] === "all" ? "All notes" : filter[0];
+  const { slug } = await params;
+  const tag = slug[0] === "all" ? "All notes" : slug[0];
 
   return {
     title: `${tag} - NoteHub`,
@@ -43,7 +43,7 @@ export async function generateMetadata({
     openGraph: {
       title: `${tag} - NoteHub`,
       description: `Browse notes filtered by ${tag}.`,
-      url: `https://your-project.vercel.app/notes/filter/${filter[0]}`,
+      url: `https://your-project.vercel.app/notes/filter/${slug[0]}`,
       images: [
         {
           url: "https://ac.goit.global/fullstack/react/notehub-og-meta.jpg",
