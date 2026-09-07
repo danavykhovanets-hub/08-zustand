@@ -31,18 +31,18 @@ export default async function NoteDetailsPage({ params }: NoteDetailsPageProps) 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ slug: string[] }>;
+  params: Promise<{ id: string }>;
 }): Promise<Metadata> {
-  const { slug } = await params;
-  const tag = slug[0] === "all" ? "All notes" : slug[0];
+  const { id } = await params;
+  const note = await fetchNoteById(id);
 
   return {
-    title: `${tag} - NoteHub`,
-    description: `Browse notes filtered by ${tag}.`,
+    title: `${note.title} - NoteHub`,
+    description: note.content.slice(0, 100),
     openGraph: {
-      title: `${tag} - NoteHub`,
-      description: `Browse notes filtered by ${tag}.`,
-      url: `https://your-project.vercel.app/notes/filter/${slug[0]}`,
+      title: `${note.title} - NoteHub`,
+      description: note.content.slice(0, 100),
+      url: `https://your-project.vercel.app/notes/${id}`,
       images: [
         {
           url: "https://ac.goit.global/fullstack/react/notehub-og-meta.jpg",
