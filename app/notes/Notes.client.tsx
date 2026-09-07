@@ -3,27 +3,18 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useDebouncedCallback } from "use-debounce";
+import Link from "next/link";
 import css from "./NotesPage.module.css";
 
 import SearchBox from "../../components/SearchBox/SearchBox";
 import NoteList from "../../components/NoteList/NoteList";
 import Pagination from "../../components/Pagination/Pagination";
-import Modal from "../../components/Modal/Modal";
-import NoteForm from "../../components/NoteForm/NoteForm";
 
-import { fetchNotes, createNote, deleteNote } from "../../lib/api";
-import type { NoteTag } from "../../types/note";
-
-interface NewNote {
-  title: string;
-  content: string;
-  tag: NoteTag;
-}
+import { fetchNotes, deleteNote } from "../../lib/api";
 
 export default function NotesClient() {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const queryClient = useQueryClient();
 
@@ -31,14 +22,6 @@ export default function NotesClient() {
     queryKey: ["notes", search, page],
     queryFn: () => fetchNotes(search, page),
     placeholderData: (prev) => prev,
-  });
-
-  const createMutation = useMutation({
-    mutationFn: (newNote: NewNote) => createNote(newNote),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["notes"] });
-      setIsModalOpen(false);
-    },
   });
 
   const deleteMutation = useMutation({
@@ -69,22 +52,13 @@ export default function NotesClient() {
           />
         )}
 
-        <button className={css.button} onClick={() => setIsModalOpen(true)}>
+        <Link href="/notes/action/create" className={css.button}>
           Create note +
-        </button>
+        </Link>
       </header>
 
       {notes.length > 0 && (
         <NoteList notes={notes} onDelete={(id) => deleteMutation.mutate(id)} />
-      )}
-
-      {isModalOpen && (
-        <Modal onClose={() => setIsModalOpen(false)}>
-          <NoteForm
-            onClose={() => setIsModalOpen(false)}
-            onSubmit={(values) => createMutation.mutate(values)}
-          />
-        </Modal>
       )}
     </div>
   );
