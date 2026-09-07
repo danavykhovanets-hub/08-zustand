@@ -6,11 +6,11 @@ import { useDebouncedCallback } from "use-debounce";
 import Link from "next/link";
 import css from "./NotesPage.module.css";
 
-import SearchBox from "../../components/SearchBox/SearchBox";
-import NoteList from "../../components/NoteList/NoteList";
-import Pagination from "../../components/Pagination/Pagination";
+import SearchBox from "../../../../components/SearchBox/SearchBox";
+import NoteList from "../../../../components/NoteList/NoteList";
+import Pagination from "../../../../components/Pagination/Pagination";
 
-import { fetchNotes, deleteNote } from "../../lib/api";
+import { fetchNotes, deleteNote } from "../../../../lib/api";
 
 export default function NotesClient() {
   const [search, setSearch] = useState("");
